@@ -1,5 +1,5 @@
 import React from "react"
-import {Text} from 'react-native'
+import {Text, Platform} from 'react-native'
 import wrap from 'lodash.wrap'
 
 let _applyed = false
@@ -8,10 +8,20 @@ export default class GlobalFont {
         if (_applyed) { return }
         Text.prototype.render = wrap(Text.prototype.render, function (func, ...args) {
             let originText = func.apply(this, args)
+            const fontOverride = { fontWeight: '', fontStyle: '' }
+            
+            if (fontFamily.indexOf("-") >= 0) {
+                if (Platform.OS === 'ios') {
+                    fontFamily = fontFamily.indexOf("-")[0]
+                    fontOverride = {}
+                }
+            }
+            
             return React.cloneElement(originText, {
                 style: [
                     {fontFamily: fontFamily},
-                    originText.props.style
+                    originText.props.style,
+                    fontOverride
                 ]
             })
         })
