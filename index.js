@@ -4,21 +4,17 @@ import wrap from 'lodash.wrap'
 
 let _applyed = false
 export default class GlobalFont {
-    static applyGlobal(fontFamily, multifile = false) {
+    static applyGlobal(fontFamily) {
         if (_applyed) { return }
         Text.prototype.render = wrap(Text.prototype.render, function (func, ...args) {
             let originText = func.apply(this, args)
             let fontOverride = {}
             
-            if (multifile 
+            if (Platform.OS === 'android'
                 && fontFamily 
                 && fontFamily.indexOf("-") >= 0
             ) {
-                if (Platform.OS === 'ios') {
-                    fontFamily = fontFamily.indexOf("-")[0]
-                } else if(Platform.OS === 'android') {
-                    fontOverride = { fontWeight: null, fontStyle: null }
-                }
+                fontOverride = { fontWeight: null, fontStyle: null }
             }
                         
             return React.cloneElement(originText, {
