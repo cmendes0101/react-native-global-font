@@ -4,16 +4,20 @@ import wrap from 'lodash.wrap'
 
 let _applyed = false
 export default class GlobalFont {
-    static applyGlobal(fontFamily) {
+    static applyGlobal(fontFamily, multifile = false) {
         if (_applyed) { return }
         Text.prototype.render = wrap(Text.prototype.render, function (func, ...args) {
             let originText = func.apply(this, args)
-            let fontOverride = { fontWeight: null, fontStyle: null }
+            let fontOverride = {}
             
-            if (fontFamily.indexOf("-") >= 0) {
+            if (multifile 
+                && fontFamily 
+                && fontFamily.indexOf("-") >= 0
+            ) {
                 if (Platform.OS === 'ios') {
                     fontFamily = fontFamily.indexOf("-")[0]
-                    fontOverride = {}
+                } else if(Platform.OS === 'android') {
+                    fontOverride = { fontWeight: null, fontStyle: null }
                 }
             }
                         
