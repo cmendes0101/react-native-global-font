@@ -8,7 +8,7 @@ export default class GlobalFont {
         if (_applyed) { return }
         Text.prototype.render = wrap(Text.prototype.render, function (func, ...args) {
             let originText = func.apply(this, args)
-            const fontOverride = { fontWeight: '', fontStyle: '' }
+            let fontOverride = { fontWeight: null, fontStyle: null }
             
             if (fontFamily.indexOf("-") >= 0) {
                 if (Platform.OS === 'ios') {
@@ -20,8 +20,7 @@ export default class GlobalFont {
             return React.cloneElement(originText, {
                 style: [
                     {fontFamily: fontFamily},
-                    originText.props.style,
-                    fontOverride
+                    Object.assign(originText.props.style, fontOverride)
                 ]
             })
         })
