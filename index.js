@@ -16,13 +16,12 @@ export default class GlobalFont {
                     fontOverride = {}
                 }
             }
-            
-            const newStyle = Object.assign(originText.props.style, fontOverride)
-            
+                        
             return React.cloneElement(originText, {
                 style: [
                     {fontFamily: fontFamily},
-                    newStyle
+                    originText.props.style,
+                    fontOverride
                 ]
             })
         })
